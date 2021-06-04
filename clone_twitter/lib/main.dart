@@ -1,4 +1,6 @@
+import 'package:clone_twitter/Screens/Home.dart';
 import 'package:clone_twitter/Screens/SplashScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,19 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  Widget wrapper() {
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData) {
+          return Home();
+        } else {
+          return SplashScreen();
+        }
+      },
+    );
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -16,7 +31,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData.dark(),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: SplashScreen(),
+      home: wrapper(),
     );
   }
 }
