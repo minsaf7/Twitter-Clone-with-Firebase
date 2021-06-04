@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.grey[900],
+      //backgroundColor: Colors.grey[900],
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
@@ -73,6 +73,10 @@ class _LoginState extends State<Login> {
   }
 
   loginBtn() {
-    print(email + " " + password);
+    if (email.isEmpty || password.isEmpty) {
+      print("EMpty");
+    } else {
+      print(email + " " + password);
+    }
   }
 }

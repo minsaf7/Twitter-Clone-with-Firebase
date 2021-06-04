@@ -1,3 +1,4 @@
+import 'package:clone_twitter/Services/AuthService.dart';
 import 'package:clone_twitter/Widgets/RoundedButton.dart';
 import 'package:flutter/material.dart';
 
@@ -93,17 +94,17 @@ class _SignUpState extends State<SignUp> {
 
               RoundedButton(
                 btnText: "Sign up",
-                // onBtnPresses: () async {
-                //   bool isValid = await AuthService.signUp(
-                //       firstName, lastName, email, password);
+                onBtnPresses: () async {
+                  bool isValid = await AuthService.signUp(
+                      firstName, lastName, email, password);
 
-                //   if (isValid) {
-                //     Navigator.pop(context);
-                //   } else {
-                //     print("Something went wrong");
-                //   }
-                // },
-                onBtnPresses: signUpBtn,
+                  if (isValid) {
+                    Navigator.pop(context);
+                  } else {
+                    print("Something went wrong");
+                  }
+                },
+                //  onBtnPresses: signUpBtn,
               )
             ],
           ),
