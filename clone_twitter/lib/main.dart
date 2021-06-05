@@ -1,3 +1,4 @@
+import 'package:clone_twitter/Screens/AuthWrapper.dart';
 import 'package:clone_twitter/Screens/Home.dart';
 import 'package:clone_twitter/Screens/SplashScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark(),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
       home: wrapper(),
+      // home: AuthWrapper(),
     );
   }
 }

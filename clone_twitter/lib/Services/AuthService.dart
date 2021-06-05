@@ -28,6 +28,8 @@ class AuthService {
           "last name": lname,
           "email": email,
           "profile picture": "",
+          "cover picture": "",
+          "bio": "",
         });
         print("Done");
         return true;

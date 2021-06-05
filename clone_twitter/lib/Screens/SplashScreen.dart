@@ -30,12 +30,18 @@ class _SplashScreenState extends State<SplashScreen> {
                     height: 200,
                     width: 200,
                   ),
-                  Text(
-                    "Minsaf's twitter clone",
-                    style:
-                        TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Text(
+                      "See what's happening in the world right now",
+                      style: TextStyle(
+                          fontSize: 30.0, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
+              ),
+              SizedBox(
+                height: 100.0,
               ),
               Container(
                 margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
@@ -48,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     btnText: "Sign Up", onBtnPresses: signUpButton),
               ),
               SizedBox(
-                height: 250.0,
+                height: 150.0,
               ),
               Container(
                 // margin: EdgeInsets.only(bottom: 10.0),
