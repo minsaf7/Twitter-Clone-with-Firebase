@@ -7,7 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String currentUserId;
+  const Home({Key? key, required this.currentUserId}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -15,12 +16,15 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
-  List screens = [
-    Timeline(),
-    Search(),
-    Notifications(),
-    Profile(),
-  ];
+  // List screens = [
+  //   Timeline(),
+  //   Search(),
+  //   Notifications(),
+  //   Profile(
+  //     currentUserId: widget.currentUserId,
+  //     visitedUserId: widget.currentUserId,
+  //   ),
+  // ];
 
   @override
   void initState() {
@@ -32,7 +36,16 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[selectedIndex],
+      // body: screens[selectedIndex],
+      body: [
+        Timeline(),
+        Search(),
+        Notifications(),
+        Profile(
+          currentUserId: widget.currentUserId,
+          visitedUserId: widget.currentUserId,
+        ),
+      ].elementAt(selectedIndex),
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: selectedIndex,
         onTap: (index) {
@@ -55,6 +68,16 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.verified_user),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () => print("object"),
+        // child: Image.asset('assets/tweet.png'),
+        child: Icon(
+          CupertinoIcons.pencil_slash,
+          color: Colors.white,
+          size: 40.0,
+        ),
       ),
     );
   }

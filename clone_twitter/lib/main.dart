@@ -12,12 +12,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   Widget wrapper() {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          return Home();
+          return Home(currentUserId: auth.currentUser!.uid);
         } else {
           return SplashScreen();
         }
