@@ -69,16 +69,6 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () => print("object"),
-        // child: Image.asset('assets/tweet.png'),
-        child: Icon(
-          CupertinoIcons.pencil_slash,
-          color: Colors.white,
-          size: 40.0,
-        ),
-      ),
     );
   }
 }

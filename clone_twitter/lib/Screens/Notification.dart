@@ -1,3 +1,4 @@
+import 'package:clone_twitter/Screens/Tweet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,17 @@ class _NotificationsState extends State<Notifications> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (builder) => Tweet())),
+        child: Image.asset('assets/tweet1.png'),
+        // child: Icon(
+        //   CupertinoIcons.pencil_slash,
+        //   color: Colors.white,
+        //   size: 40.0,
+        // ),
       ),
     );
   }

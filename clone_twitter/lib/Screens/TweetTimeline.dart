@@ -1,3 +1,4 @@
+import 'package:clone_twitter/Screens/Tweet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class _TimelineState extends State<Timeline> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => print("object"),
+          onPressed: () => sideMenu(),
           icon: Icon(
             CupertinoIcons.line_horizontal_3_decrease_circle_fill,
             size: 40,
@@ -28,6 +29,24 @@ class _TimelineState extends State<Timeline> {
         ),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (builder) => Tweet())),
+        child: Image.asset('assets/tweet1.png'),
+        // child: Icon(
+        //   CupertinoIcons.pencil_slash,
+        //   color: Colors.white,
+        //   size: 40.0,
+        // ),
+      ),
+    );
+  }
+
+  sideMenu() {
+    return Drawer(
+      elevation: 5.0,
+      child: Text("This is a drawer"),
     );
   }
 }
