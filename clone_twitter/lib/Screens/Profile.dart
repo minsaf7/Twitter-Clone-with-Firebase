@@ -1,5 +1,6 @@
 import 'package:clone_twitter/Constants/Constants.dart';
 import 'package:clone_twitter/Model/Users.dart';
+import 'package:clone_twitter/Screens/EditProfile.dart';
 import 'package:clone_twitter/Services/DBServices.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -195,26 +196,34 @@ class _ProfileState extends State<Profile> {
                               ? null
                               : NetworkImage(usersModel.profilePicture),
                         ),
-                        Container(
-                          height: 35,
-                          width: 100,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          // color: Colors.amber,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[850],
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              width: 2.0,
-                              color: Colors.blue,
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile(
+                                        user: usersModel,
+                                      ))),
+                          child: Container(
+                            height: 35,
+                            width: 100,
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            // color: Colors.amber,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[850],
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                width: 2.0,
+                                color: Colors.blue,
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Edit",
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.bold),
+                            child: Center(
+                              child: Text(
+                                "Edit",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),
