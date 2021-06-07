@@ -38,6 +38,7 @@ dependencies:
   uuid: ^3.0.4
   provider: ^5.0.0
   cupertino_tabbar: ^2.0.0
+  image: ^3.0.2
 
 dev_dependencies:
   flutter_test:
