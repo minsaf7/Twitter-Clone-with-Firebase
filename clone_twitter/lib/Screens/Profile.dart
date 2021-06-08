@@ -194,12 +194,12 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox.shrink(),
-                      // widget.currentUserId != widget.visitedUserId
-                      //     ? IconButton(
-                      //         onPressed: () => Navigator.pop(context),
-                      //         icon: Icon(Icons.close),
-                      //       )
-                      //     : Container()
+                      widget.currentUserId != widget.visitedUserId
+                          ? IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: Icon(Icons.close),
+                            )
+                          : Container()
                     ],
                   ),
                 ),

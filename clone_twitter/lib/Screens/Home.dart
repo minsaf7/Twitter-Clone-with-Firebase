@@ -38,11 +38,15 @@ class _HomeState extends State<Home> {
     return Scaffold(
       // body: screens[selectedIndex],
       body: [
-        Timeline(),
+        Timeline(
+          currentUserId: widget.currentUserId,
+        ),
         Search(
           currentUserId: widget.currentUserId,
         ),
-        Notifications(),
+        Notifications(
+          currentUserId: widget.currentUserId,
+        ),
         Profile(
           currentUserId: widget.currentUserId,
           visitedUserId: widget.currentUserId,
