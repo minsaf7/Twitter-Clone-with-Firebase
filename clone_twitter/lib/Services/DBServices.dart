@@ -5,14 +5,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DBServices {
   static Future<int> followersNum(String userID) async {
     QuerySnapshot followers =
-        await followersRef.doc(userID).collection("userFollowers").get();
+        await followersRef.doc(userID).collection("Followers").get();
 
     return followers.docs.length;
   }
 
   static Future<int> followingNum(String userID) async {
     QuerySnapshot followers =
-        await followingRef.doc(userID).collection("userFollowing").get();
+        await followingRef.doc(userID).collection("Followings").get();
 
     return followers.docs.length;
   }
@@ -25,5 +25,64 @@ class DBServices {
       'cover picture': user.coverPicture,
       'profile picture': user.profilePicture,
     });
+  }
+
+  static Future<QuerySnapshot> searchUsers(String name) async {
+    Future<QuerySnapshot> user = userRef
+        .where('first name', isGreaterThanOrEqualTo: name)
+        .get()
+        .whenComplete(() => null);
+    print("NAME: " + name);
+
+    return user;
+  }
+
+  static void followUser(String currentUserId, String visitedUserId) {
+    followingRef
+        .doc(currentUserId)
+        .collection("Followings")
+        .doc(visitedUserId)
+        .set({});
+
+    followersRef
+        .doc(visitedUserId)
+        .collection("Followers")
+        .doc(currentUserId)
+        .set({});
+  }
+
+  static void unFollowUser(String currentUserId, String visitedUserId) {
+    followingRef
+        .doc(currentUserId)
+        .collection("Followings")
+        .doc(visitedUserId)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        value.reference.delete();
+      }
+    });
+
+    followersRef
+        .doc(visitedUserId)
+        .collection("Followers")
+        .doc(currentUserId)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        value.reference.delete();
+      }
+    });
+  }
+
+  static Future<bool> isFollowingUser(
+      String currentUserId, String visitedUserId) async {
+    DocumentSnapshot followingDoc = await followersRef
+        .doc(visitedUserId)
+        .collection("Followers")
+        .doc(currentUserId)
+        .get();
+
+    return followingDoc.exists;
   }
 }

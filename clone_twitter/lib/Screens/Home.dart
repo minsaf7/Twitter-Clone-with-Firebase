@@ -39,7 +39,9 @@ class _HomeState extends State<Home> {
       // body: screens[selectedIndex],
       body: [
         Timeline(),
-        Search(),
+        Search(
+          currentUserId: widget.currentUserId,
+        ),
         Notifications(),
         Profile(
           currentUserId: widget.currentUserId,

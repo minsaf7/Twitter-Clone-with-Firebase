@@ -22,6 +22,7 @@ class _ProfileState extends State<Profile> {
   int followersCount = 0;
   int followingCount = 0;
   int profileSegmentValue = 0;
+  bool isFollowing = false;
 
   Map<int, Widget> profileTabs = <int, Widget>{
     0: Padding(
@@ -104,12 +105,46 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  followUnfollow() {
+    if (isFollowing) {
+      unFollow();
+    } else {
+      follow();
+    }
+  }
+
+  follow() {
+    DBServices.followUser(widget.currentUserId, widget.visitedUserId);
+    setState(() {
+      isFollowing = true;
+      followersCount++;
+    });
+  }
+
+  unFollow() {
+    DBServices.unFollowUser(widget.currentUserId, widget.visitedUserId);
+
+    setState(() {
+      isFollowing = false;
+      followersCount--;
+    });
+  }
+
+  setupFollowing() async {
+    bool isFollowingTHeUser = await DBServices.isFollowingUser(
+        widget.currentUserId, widget.visitedUserId);
+    setState(() {
+      isFollowing = isFollowingTHeUser;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getFollowersCount();
     getFollowingCount();
+    setupFollowing();
   }
 
   @override
@@ -159,18 +194,12 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox.shrink(),
-                      PopupMenuButton(
-                        icon: Icon(Icons.more_horiz),
-                        itemBuilder: (_) {
-                          return <PopupMenuItem<String>>[
-                            new PopupMenuItem(
-                              child: Text("Logout"),
-                              value: "Logout",
-                            ),
-                          ];
-                        },
-                        onSelected: (selectedItem) {},
-                      )
+                      // widget.currentUserId != widget.visitedUserId
+                      //     ? IconButton(
+                      //         onPressed: () => Navigator.pop(context),
+                      //         icon: Icon(Icons.close),
+                      //       )
+                      //     : Container()
                     ],
                   ),
                 ),
@@ -196,37 +225,68 @@ class _ProfileState extends State<Profile> {
                               ? null
                               : NetworkImage(usersModel.profilePicture),
                         ),
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile(
-                                        user: usersModel,
-                                      ))),
-                          child: Container(
-                            height: 35,
-                            width: 100,
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            // color: Colors.amber,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[850],
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                width: 2.0,
-                                color: Colors.blue,
+                        widget.currentUserId != widget.visitedUserId
+                            ? GestureDetector(
+                                onTap: () => followUnfollow(),
+                                child: Container(
+                                  height: 35,
+                                  width: 100,
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  // color: Colors.amber,
+                                  decoration: BoxDecoration(
+                                    color: isFollowing
+                                        ? Colors.blue
+                                        : Colors.grey[850],
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      width: 2.0,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      isFollowing ? "Following" : "Follow",
+                                      style: TextStyle(
+                                          color: isFollowing
+                                              ? Colors.white
+                                              : Colors.blue,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditProfile(
+                                              user: usersModel,
+                                            ))),
+                                child: Container(
+                                  height: 35,
+                                  width: 100,
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  // color: Colors.amber,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[850],
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      width: 2.0,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Edit",
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Edit",
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                     SizedBox(
