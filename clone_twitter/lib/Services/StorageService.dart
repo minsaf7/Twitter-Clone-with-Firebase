@@ -60,4 +60,22 @@ class StorageService {
 
     return compressedImage;
   }
+
+  static Future<String> uploadTweetPic(File fileImage) async {
+    String? uniquePhotoId = Uuid().v4();
+    File? image = await compressImage(uniquePhotoId, fileImage);
+
+    // if (url.isNotEmpty) {
+    //   RegExp exp = RegExp(r'userCover_(.*).jpg');
+    //   uniquePhotoId = exp.firstMatch(url)![1];
+    // }
+    UploadTask uploadTask = storageRef
+        .child("images/tweets/tweets_$uniquePhotoId.jpg")
+        .putFile(fileImage);
+
+    TaskSnapshot taskSnapshot =
+        await uploadTask.whenComplete(() => print("complete"));
+    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
 }

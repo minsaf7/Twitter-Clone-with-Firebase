@@ -37,7 +37,11 @@ class _NotificationsState extends State<Notifications> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (builder) => Tweet())),
+            context,
+            MaterialPageRoute(
+                builder: (builder) => Tweet(
+                      currentUserId: widget.currentUserId,
+                    ))),
         child: Image.asset('assets/tweet1.png'),
         // child: Icon(
         //   CupertinoIcons.pencil_slash,

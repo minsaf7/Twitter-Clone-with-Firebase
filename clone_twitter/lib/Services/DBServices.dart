@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:clone_twitter/Constants/Constants.dart';
 import 'package:clone_twitter/Model/Users.dart';
+import 'package:clone_twitter/Model/TweetModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DBServices {
@@ -84,5 +87,18 @@ class DBServices {
         .get();
 
     return followingDoc.exists;
+  }
+
+  static void createTweet(Tweets userTweets) {
+    tweetRef.doc(userTweets.authorId).set({"timeline": userTweets.timestamp});
+
+    final tw = tweetRef.doc(userTweets.authorId).collection("userTweets").add({
+      'text': userTweets.text,
+      'image': userTweets.image,
+      "authorId": userTweets.authorId,
+      "timestamp": userTweets.timestamp,
+      'likes': userTweets.likes,
+      'retweets': userTweets.retweets,
+    });
   }
 }
