@@ -151,4 +151,84 @@ class DBServices {
 
     return followingTwts;
   }
+
+  static void likeTweets(String currentUserId, Tweets tweets) {
+    DocumentReference tweetDocProfile =
+        tweetRef.doc(tweets.authorId).collection("userTweets").doc(tweets.id);
+
+    tweetDocProfile.get().then((value) {
+      int likes = value["likes"];
+      tweetDocProfile.update(
+        {"likes": likes + 1},
+      );
+    });
+
+    DocumentReference tweetDocFeed =
+        feedRef.doc(currentUserId).collection("feed").doc(tweets.id);
+
+    tweetDocFeed.get().then((value) {
+      int likes = value["likes"];
+      tweetDocFeed.update(
+        {"likes": likes + 1},
+      );
+    });
+
+    likesRef.doc(tweets.id).collection("tweetLikes").doc(currentUserId).set({});
+  }
+
+  static void unLikeTweets(String currentUserId, Tweets tweets) {
+    DocumentReference tweetDocProfile =
+        tweetRef.doc(tweets.authorId).collection("userTweets").doc(tweets.id);
+
+    tweetDocProfile.get().then((value) {
+      int likes = value["likes"];
+      tweetDocProfile.update(
+        {"likes": likes - 1},
+      );
+    });
+
+    DocumentReference tweetDocFeed =
+        feedRef.doc(currentUserId).collection("feed").doc(tweets.id);
+
+    tweetDocFeed.get().then((value) {
+      int likes = value["likes"];
+      tweetDocFeed.update(
+        {"likes": likes - 1},
+      );
+    });
+
+    likesRef
+        .doc(tweets.id)
+        .collection("tweetLikes")
+        .doc(currentUserId)
+        .get()
+        .then((value) {
+      value.reference.delete();
+    });
+  }
+
+  static Future<bool> isLikedTweet(String currentUserId, Tweets tweets) async {
+    DocumentSnapshot userDoc = await likesRef
+        .doc(tweets.id)
+        .collection('tweetLikes')
+        .doc(currentUserId)
+        .get();
+
+    return userDoc.exists;
+  }
+
+  //  static Future<List<Activity>> getActivities(String userId) async {
+  //   QuerySnapshot userActivitiesSnapshot = await activitiesRef
+  //       .doc(userId)
+  //       .collection('userActivities')
+  //       .orderBy('timestamp', descending: true)
+  //       .get();
+
+  //   List<Activity> activities = userActivitiesSnapshot.docs
+  //       .map((doc) => Activity.fromDoc(doc))
+  //       .toList();
+
+  //   return activities;
+  // }
+
 }

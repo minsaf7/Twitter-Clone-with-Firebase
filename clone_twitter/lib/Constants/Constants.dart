@@ -10,3 +10,4 @@ final followingRef = firestore.collection("followings");
 final storageRef = FirebaseStorage.instance.ref();
 final tweetRef = firestore.collection("tweets");
 final feedRef = firestore.collection("feed");
+final likesRef = firestore.collection("likes");
