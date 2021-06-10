@@ -1,6 +1,9 @@
 import 'package:clone_twitter/Constants/Constants.dart';
+import 'package:clone_twitter/Model/TweetModel.dart';
 import 'package:clone_twitter/Model/Users.dart';
 import 'package:clone_twitter/Screens/Tweet.dart';
+import 'package:clone_twitter/Services/DBServices.dart';
+import 'package:clone_twitter/Widgets/TweerContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +18,59 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
+  List followingsTweet = [];
+  bool isLoading = false;
+
+  displayTweets(Tweets tweets, UsersModel auther) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: AllTweets(
+          tweets: tweets, auther: auther, currentUserId: widget.currentUserId),
+    );
+  }
+
+  displayFollowingTweet(String currentUserId) {
+    List<Widget> followingTweet = [];
+    for (Tweets tweets in followingsTweet) {
+      followingTweet.add(
+        FutureBuilder<DocumentSnapshot>(
+          future: userRef.doc(tweets.authorId).get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              UsersModel auther = UsersModel.fromDoc(snapshot.data!);
+              return displayTweets(tweets, auther);
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ),
+      );
+    }
+    return followingTweet;
+  }
+
+  setFollowingTweets() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    List followTweets = [];
+    followTweets = await DBServices.getFeedTweets(widget.currentUserId);
+    if (mounted) {
+      setState(() {
+        followingsTweet = followTweets;
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setFollowingTweets();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +90,6 @@ class _TimelineState extends State<Timeline> {
         ),
         centerTitle: true,
       ),
-      body: TextButton(
-          onPressed: () {
-            // FirebaseAuth.instance.signOut();
-            // Navigator.pop(context);
-          },
-          child: Text("Logout")),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () => Navigator.push(
@@ -127,6 +177,43 @@ class _TimelineState extends State<Timeline> {
                 ],
               );
             }),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () => setFollowingTweets(),
+        child: ListView(
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            isLoading ? LinearProgressIndicator() : SizedBox.shrink(),
+            SizedBox(
+              height: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 5,
+                ),
+                Column(
+                  children: followingsTweet.isEmpty && isLoading == false
+                      ? [
+                          SizedBox(height: 5),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: Text(
+                              'There is No New Tweets',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          )
+                        ]
+                      : displayFollowingTweet(widget.currentUserId),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

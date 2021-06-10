@@ -100,6 +100,22 @@ class DBServices {
       "timestamp": userTweets.timestamp,
       'likes': userTweets.likes,
       'retweets': userTweets.retweets,
+    }).then((value) async {
+      QuerySnapshot followerSnapshot = await followersRef
+          .doc(userTweets.authorId)
+          .collection('Followers')
+          .get();
+
+      for (var docSnapshot in followerSnapshot.docs) {
+        feedRef.doc(docSnapshot.id).collection('feed').doc(value.id).set({
+          'text': userTweets.text,
+          'image': userTweets.image,
+          "authorId": userTweets.authorId,
+          "timestamp": userTweets.timestamp,
+          'likes': userTweets.likes,
+          'retweets': userTweets.retweets,
+        });
+      }
     });
   }
 
@@ -121,5 +137,18 @@ class DBServices {
     }
 
     return userTweets;
+  }
+
+  static Future<List> getFeedTweets(String currentUser) async {
+    QuerySnapshot snap = await feedRef
+        .doc(currentUser)
+        .collection("feed")
+        .orderBy("timestamp", descending: true)
+        .get();
+
+    List<Tweets> followingTwts =
+        snap.docs.map((e) => Tweets.fromDoc(e)).toList();
+
+    return followingTwts;
   }
 }

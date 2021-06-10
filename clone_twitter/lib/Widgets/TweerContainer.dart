@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 class AllTweets extends StatefulWidget {
   final Tweets tweets;
   final UsersModel auther;
-  const AllTweets({Key? key, required this.tweets, required this.auther})
+  final String currentUserId;
+  const AllTweets(
+      {Key? key,
+      required this.tweets,
+      required this.auther,
+      required this.currentUserId})
       : super(key: key);
 
   @override
@@ -90,11 +95,11 @@ class _AllTweetsState extends State<AllTweets> {
                         )
                       ],
                     ),
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: Icon(Icons.comment_outlined),
-                    // ),
-                    Text(widget.tweets.timestamp.toString().substring(0, 19))
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.comment_outlined),
+                    ),
+                    // Text(widget.tweets.timestamp.toString().substring(0, 19))
                   ],
                 ),
               ),

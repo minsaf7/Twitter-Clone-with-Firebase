@@ -82,7 +82,11 @@ class _ProfileState extends State<Profile> {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return AllTweets(tweets: allTweets[index], auther: auther);
+              return AllTweets(
+                tweets: allTweets[index],
+                auther: auther,
+                currentUserId: auther.id,
+              );
             });
         break;
       case 1:
@@ -91,7 +95,11 @@ class _ProfileState extends State<Profile> {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return AllTweets(tweets: allTweets[index], auther: auther);
+              return AllTweets(
+                tweets: allTweets[index],
+                auther: auther,
+                currentUserId: auther.id,
+              );
             });
         break;
       case 2:
