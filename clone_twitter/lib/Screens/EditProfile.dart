@@ -20,10 +20,12 @@ class _EditProfileState extends State<EditProfile> {
   late String lname = "";
   late String bio = "";
 
+  bool isProPicSelected = false;
+  bool isCoverPicSelected = false;
+
   late File profileImage = File(
       "/data/user/0/com.example.clone_twitter/cache/image_picker9179270098455350113.jpg");
-  late File coverImage = File(
-      "/data/user/0/com.example.clone_twitter/cache/image_picker9179270098455350113.jpg");
+  late File coverImage;
 
   late String imagePickedType;
 
@@ -241,7 +243,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   displayCoverImage() {
-    if (coverImage.path.isEmpty) {
+    if (isCoverPicSelected == false) {
       if (widget.user.coverPicture.isEmpty) {
         return AssetImage("assets/blue.png");
       } else {
@@ -255,7 +257,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   displayProfileImage() {
-    if (profileImage.path.isEmpty) {
+    if (isProPicSelected == false) {
       if (widget.user.profilePicture.isEmpty) {
         return AssetImage("assets/blue.png");
       } else {
@@ -279,11 +281,13 @@ class _EditProfileState extends State<EditProfile> {
       if (pickedImage != null) {
         if (imagePickedType == 'profile') {
           setState(() {
+            isProPicSelected = true;
             //profileImage = pickedImage;
             profileImage = File(pickedImage.path);
           });
         } else if (imagePickedType == 'cover') {
           setState(() {
+            isCoverPicSelected = true;
             coverImage = File(pickedImage.path);
           });
           print(coverImage.path);
@@ -331,38 +335,4 @@ class _EditProfileState extends State<EditProfile> {
       Navigator.pop(context);
     }
   }
-  // saveProfile() async {
-  //   formKey.currentState!.save();
-  //   if (formKey.currentState!.validate() && !isLoading) {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     String profilePictureUrl = '';
-  //     String coverPictureUrl = '';
-  //     if (profileImage == null) {
-  //       profilePictureUrl = widget.user.profilePicture;
-  //     } else {
-  //       profilePictureUrl = await StorageService.uploadProfilePicture(
-  //           widget.user.profilePicture, profileImage);
-  //     }
-  //     if (coverImage == null) {
-  //       coverPictureUrl = widget.user.coverPicture;
-  //     } else {
-  //       coverPictureUrl = await StorageService.uploadCoverPicture(
-  //           widget.user.coverPicture, coverImage);
-  //     }
-  //     UsersModel user = UsersModel(
-  //       id: widget.user.id,
-  //       fname: fname,
-  //       lname: lname,
-  //       profilePicture: profilePictureUrl,
-  //       bio: bio,
-  //       coverPicture: coverPictureUrl,
-  //        email: widget.user.email,
-  //     );
-
-  //     DBServices.updateUserData(user);
-  //     Navigator.pop(context);
-  //   }
-  // }
 }

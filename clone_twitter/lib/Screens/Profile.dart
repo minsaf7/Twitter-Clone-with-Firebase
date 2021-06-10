@@ -1,7 +1,9 @@
 import 'package:clone_twitter/Constants/Constants.dart';
+import 'package:clone_twitter/Model/TweetModel.dart';
 import 'package:clone_twitter/Model/Users.dart';
 import 'package:clone_twitter/Screens/EditProfile.dart';
 import 'package:clone_twitter/Services/DBServices.dart';
+import 'package:clone_twitter/Widgets/TweerContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,8 @@ class _ProfileState extends State<Profile> {
   int followingCount = 0;
   int profileSegmentValue = 0;
   bool isFollowing = false;
+  List allTweets = [];
+  List mediaTweets = [];
 
   Map<int, Widget> profileTabs = <int, Widget>{
     0: Padding(
@@ -68,38 +72,38 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  buildProfile() {
+  allTweetContainer() {}
+
+  buildProfile(UsersModel auther) {
     switch (profileSegmentValue) {
       case 0:
-        return Center(
-          child: Text(
-            "Tweets",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        );
+        return ListView.builder(
+            itemCount: allTweets.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return AllTweets(tweets: allTweets[index], auther: auther);
+            });
         break;
       case 1:
-        return Center(
-          child: Text(
-            "Media",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        );
+        return ListView.builder(
+            itemCount: mediaTweets.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return AllTweets(tweets: allTweets[index], auther: auther);
+            });
         break;
       case 2:
-        return Center(
-          child: Text(
-            "Likes",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+        return Text(
+          "Likes",
+          style: TextStyle(fontWeight: FontWeight.bold),
         );
         break;
       default:
-        return Center(
-          child: Text(
-            "Something went wrong",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+        return Text(
+          "Something went wrong",
+          style: TextStyle(fontWeight: FontWeight.bold),
         );
         break;
     }
@@ -138,6 +142,27 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  getAllTweets() async {
+    print("1");
+    List userTweets = await DBServices.getUserTweets(widget.currentUserId);
+    print("2");
+    if (mounted) {
+      print("3");
+      setState(() {
+        allTweets = userTweets;
+        mediaTweets =
+            userTweets.where((element) => element.image.isNotEmpty).toList();
+      });
+      print("4");
+
+      if (allTweets.isEmpty) {
+        print("Tweets empty");
+      } else {
+        print(allTweets[0]);
+      }
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -145,6 +170,7 @@ class _ProfileState extends State<Profile> {
     getFollowersCount();
     getFollowingCount();
     setupFollowing();
+    getAllTweets();
   }
 
   @override
@@ -348,7 +374,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
 
-              buildProfile()
+              buildProfile(usersModel)
             ],
           );
         },

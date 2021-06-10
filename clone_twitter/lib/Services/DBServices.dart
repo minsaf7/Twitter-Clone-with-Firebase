@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:clone_twitter/Constants/Constants.dart';
 import 'package:clone_twitter/Model/Users.dart';
+
 import 'package:clone_twitter/Model/TweetModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -100,5 +101,25 @@ class DBServices {
       'likes': userTweets.likes,
       'retweets': userTweets.retweets,
     });
+  }
+
+  static Future<List> getUserTweets(String userId) async {
+    QuerySnapshot tweetSnap = await tweetRef
+        // .doc(userId)
+        // .collection("tweets")
+        .doc(userId)
+        .collection("userTweets")
+        .orderBy('timestamp', descending: true)
+        .get();
+    // .orderBy('timestamp', descending: true)
+    // .get();
+
+    List<Tweets> userTweets =
+        tweetSnap.docs.map((e) => Tweets.fromDoc(e)).toList();
+    if (userTweets.isEmpty) {
+      print("ERROR");
+    }
+
+    return userTweets;
   }
 }
