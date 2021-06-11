@@ -216,19 +216,4 @@ class DBServices {
 
     return userDoc.exists;
   }
-
-  //  static Future<List<Activity>> getActivities(String userId) async {
-  //   QuerySnapshot userActivitiesSnapshot = await activitiesRef
-  //       .doc(userId)
-  //       .collection('userActivities')
-  //       .orderBy('timestamp', descending: true)
-  //       .get();
-
-  //   List<Activity> activities = userActivitiesSnapshot.docs
-  //       .map((doc) => Activity.fromDoc(doc))
-  //       .toList();
-
-  //   return activities;
-  // }
-
 }
